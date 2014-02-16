@@ -8,19 +8,25 @@ using MqttViewer.Models;
 
 namespace MqttViewer.ViewModels
 {
-    public class ConnectionViewModel : BaseViewModel
+    /// <summary>
+    /// ViewModel for the MQTT connection.
+    /// </summary>
+    class ConnectionViewModel : BaseViewModel
     {
         private ConnectionModel _model;
         private TopicTreeViewModel _tree;
 
         private String _brokerAddress = "test.mosquitto.org:1883";
-        private DelegateCommand _buttonCommand;
+        private DelegateCommand _connectionButtonCommand;
 
 
+        /// <summary>
+        /// Gets the ViewModel for the TopicTree.
+        /// </summary>
         public TopicTreeViewModel tree
         {
             get { return _tree; }
-            set
+            private set
             {
                 if (value != _tree)
                 {
@@ -30,6 +36,9 @@ namespace MqttViewer.ViewModels
             }
         }
 
+        /// <summary>
+        /// Gets or sets the address for the MQTT broker.
+        /// </summary>
         public String brokerAddress
         {
             get { return _brokerAddress; }
@@ -43,7 +52,10 @@ namespace MqttViewer.ViewModels
             }
         }
 
-        public String buttonText
+        /// <summary>
+        /// Gets the text for the connection button.
+        /// </summary>
+        public String connectionButtonText
         {
             get
             {
@@ -58,11 +70,17 @@ namespace MqttViewer.ViewModels
             }
         }
 
-        public DelegateCommand buttonCommand
+        /// <summary>
+        /// Gets the command for the connection button.
+        /// </summary>
+        public DelegateCommand connectionButtonCommand
         {
-            get { return _buttonCommand; }
+            get { return _connectionButtonCommand; }
         }
 
+        /// <summary>
+        /// Gets a value that indicates if the address field can be edited.
+        /// </summary>
         public bool isBrokerAddressEnabled
         {
             get
@@ -72,14 +90,20 @@ namespace MqttViewer.ViewModels
         }
 
 
+        /// <summary>
+        /// Initializes a new instance of the ConnectionViewModel class.
+        /// </summary>
         public ConnectionViewModel()
         {
             _model = new ConnectionModel();
             _model.PropertyChanged += onModelChanged;
-            _buttonCommand = new DelegateCommand(x => buttonAction(), x => brokerAddress != "");
+            _connectionButtonCommand = new DelegateCommand(x => connectionButtonAction(), x => brokerAddress != "");
         }
 
-        private void buttonAction()
+        /// <summary>
+        /// Connect or disconnect MQTT broker.
+        /// </summary>
+        private void connectionButtonAction()
         {
             if (_model.isConnected)
             {
@@ -91,12 +115,17 @@ namespace MqttViewer.ViewModels
             }
         }
 
+        /// <summary>
+        /// Called when the PropertyChanged event is raised.
+        /// </summary>
+        /// <param name="sender">Object that raised the event.</param>
+        /// <param name="e">EventArgs for the event.</param>
         private void onModelChanged(object sender, PropertyChangedEventArgs e)
         {
             switch (e.PropertyName)
             {
                 case "isConnected":
-                    NotifyPropertyChanged("buttonText");
+                    NotifyPropertyChanged("connectionButtonText");
                     NotifyPropertyChanged("isBrokerAddressEnabled");
                     break;
 

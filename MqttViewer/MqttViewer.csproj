@@ -72,7 +72,6 @@
     <Compile Include="Views\ConnectionView.xaml.cs">
       <DependentUpon>ConnectionView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\SelectedItemObserver.cs" />
     <Compile Include="Views\TopicTreeView.xaml.cs">
       <DependentUpon>TopicTreeView.xaml</DependentUpon>
     </Compile>

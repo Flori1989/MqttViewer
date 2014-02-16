@@ -7,16 +7,21 @@ using MqttLib;
 
 namespace MqttViewer.Models
 {
+    /// <summary>
+    /// Manages the connection to the MQTT broker.
+    /// </summary>
     class ConnectionModel : BaseModel
     {
-        IMqtt _client;
-        TopicTreeModel _topics;
+        private IMqtt _client;
+        private TopicTreeModel _topics;
 
-
+        /// <summary>
+        /// Gets the received messages for this connection.
+        /// </summary>
         public TopicTreeModel topics
         {
             get { return _topics; }
-            set
+            private set
             {
                 if (value != topics)
                 {
@@ -26,6 +31,9 @@ namespace MqttViewer.Models
             }
         }
 
+        /// <summary>
+        /// Gets a value that indicate wether the connection is active.
+        /// </summary>
         public bool isConnected
         {
             get
@@ -41,7 +49,10 @@ namespace MqttViewer.Models
             }
         }
 
-
+        /// <summary>
+        /// Connect to a MQTT broker.
+        /// </summary>
+        /// <param name="brokerAddress">Address/Hostname and Port of the broker to connect to.</param>
         public void connect(String brokerAddress)
         {
             if (_client == null || !_client.IsConnected)
@@ -58,6 +69,9 @@ namespace MqttViewer.Models
             }
         }
 
+        /// <summary>
+        /// Disconnect from the connected broker.
+        /// </summary>
         public void disconnect()
         {
             if (_client != null && _client.IsConnected)
@@ -69,32 +83,47 @@ namespace MqttViewer.Models
             }
         }
 
-        void onConnected(object sender, EventArgs e)
+        /// <summary>
+        /// Called when the Connected event is raised.
+        /// </summary>
+        /// <param name="sender">Object that raised the event.</param>
+        /// <param name="e">EventArgs for the event.</param>
+        private void onConnected(object sender, EventArgs e)
         {
             Console.WriteLine("Client connected\n");
             NotifyPropertyChanged("isConnected");
             RegisterSubscriptions();
         }
 
-        void RegisterSubscriptions()
+        /// <summary>
+        /// Subscribe to the default topic.
+        /// </summary>
+        private void RegisterSubscriptions()
         {
             String subscription = "#";
-            //Console.WriteLine("Subscribing to " + subscription + "\n");
             _client.Subscribe(subscription, QoS.BestEfforts);
         }
 
-        void onConnectionLost(object sender, EventArgs e)
+        /// <summary>
+        /// Called when the ConnectionLost event is raised.
+        /// </summary>
+        /// <param name="sender">Object that raised the event.</param>
+        /// <param name="e">EventArgs for the event.</param>
+        private void onConnectionLost(object sender, EventArgs e)
         {
             Console.WriteLine("Client connection lost\n");
             NotifyPropertyChanged("isConnected");
         }
 
-        bool onPublishArrived(object sender, PublishArrivedArgs e)
+        /// <summary>
+        /// Called when the PublishArrived event is raised.
+        /// Updates the TopicTreeModel with the received message.
+        /// </summary>
+        /// <param name="sender">Object that raised the event.</param>
+        /// <param name="e">EventArgs for the event.</param>
+        /// <returns>All messages are accepted.</returns>
+        private bool onPublishArrived(object sender, PublishArrivedArgs e)
         {
-            //Console.WriteLine("Received Message");
-            //Console.WriteLine("Topic: " + e.Topic);
-            //Console.WriteLine("Payload: " + e.Payload);
-            //Console.WriteLine();
             _topics.update(e.Topic, e.Payload.TrimmedBuffer);
             return true;
         }

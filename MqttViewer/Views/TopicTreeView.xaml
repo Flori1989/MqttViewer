@@ -24,7 +24,7 @@
             
             <TreeView.ItemTemplate>
                 <HierarchicalDataTemplate ItemsSource="{Binding children}">
-                    <TextBlock Text="{Binding visibleName}"  />
+                    <TextBlock Text="{Binding displayName}"  />
                 </HierarchicalDataTemplate>
             </TreeView.ItemTemplate>
         </TreeView>

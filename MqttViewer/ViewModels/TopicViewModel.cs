@@ -10,7 +10,10 @@ using System.ComponentModel;
 
 namespace MqttViewer.ViewModels
 {
-    public class TopicViewModel : BaseViewModel, IComparable
+    /// <summary>
+    /// ViewModel for the TopicView.
+    /// </summary>
+    class TopicViewModel : BaseViewModel, IComparable
     {
         private TopicModel _model;
         private ObservableCollection<TopicViewModel> _children;
@@ -19,6 +22,10 @@ namespace MqttViewer.ViewModels
         private bool _isSelected;
         private int _messageLenghtLimit = 20000;
 
+
+        /// <summary>
+        /// Gets or sets the children of this element.
+        /// </summary>
         public ObservableCollection<TopicViewModel> children
         {
             get { return _children; }
@@ -32,21 +39,9 @@ namespace MqttViewer.ViewModels
             }
         }
 
-        public String timestamp
-        {
-            get
-            {
-                if (_model != null)
-                {
-                    return _model.timestamp.ToShortDateString() + " " + _model.timestamp.ToLongTimeString() + "." + _model.timestamp.Millisecond.ToString("D3");
-                }
-                else
-                {
-                    return "";
-                }
-            }
-        }
-
+        /// <summary>
+        /// Gets the MQTT topic string.
+        /// </summary>
         public String fullName
         {
             get
@@ -55,12 +50,18 @@ namespace MqttViewer.ViewModels
             }
         }
 
+        /// <summary>
+        /// Gets the last part of the MQTT topic string (after the last slash).
+        /// </summary>
         public String name
         {
             get { return fullName.Split('/').Last(); }
         }
 
-        public String visibleName
+        /// <summary>
+        /// Gets the display name for this element
+        /// </summary>
+        public String displayName
         {
             get {
                 if (name == "")
@@ -74,6 +75,9 @@ namespace MqttViewer.ViewModels
             }
         }
 
+        /// <summary>
+        /// Gets the path part of the MQTT topic string (until the last slash).
+        /// </summary>
         public String path
         {
             get
@@ -82,6 +86,9 @@ namespace MqttViewer.ViewModels
             }
         }
 
+        /// <summary>
+        /// Gets the payload of the MQTT message.
+        /// </summary>
         public byte[] message
         {
             get
@@ -97,6 +104,9 @@ namespace MqttViewer.ViewModels
             }
         }
 
+        /// <summary>
+        /// Gets the payload of the MQTT message encoded as string if possible.
+        /// </summary>
         public String messageString
         {
             get
@@ -125,6 +135,27 @@ namespace MqttViewer.ViewModels
             }
         }
 
+        /// <summary>
+        /// Gets the reception time of the MQTT message.
+        /// </summary>
+        public String timestamp
+        {
+            get
+            {
+                if (_model != null)
+                {
+                    return _model.timestamp.ToShortDateString() + " " + _model.timestamp.ToLongTimeString();
+                }
+                else
+                {
+                    return "";
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets whether the children items are expanded or collapsed. 
+        /// </summary>
         public bool isExpanded
         {
             get { return _isExpanded; }
@@ -137,6 +168,10 @@ namespace MqttViewer.ViewModels
                 }
             }
         }
+
+        /// <summary>
+        /// Gets or sets whether this item is selected is selected.
+        /// </summary>
         public bool isSelected
         {
             get { return _isSelected; }
@@ -150,6 +185,11 @@ namespace MqttViewer.ViewModels
             }
         }
 
+
+        /// <summary>
+        /// Initalizes a new instance of the TopicViewModel class.
+        /// </summary>
+        /// <param name="model">Model for the new TopicViewModel.</param>
         public TopicViewModel(TopicModel model)
         {
             _children = new ObservableCollection<TopicViewModel>();
@@ -158,12 +198,21 @@ namespace MqttViewer.ViewModels
             _fullName = "/" + model.topic;
         }
 
+        /// <summary>
+        /// Initalizes a new instance of the TopicViewModel class.
+        /// </summary>
+        /// <param name="name">Name for the new TopicViewModel.</param>
         public TopicViewModel(String name)
         {
             _children = new ObservableCollection<TopicViewModel>();
             _fullName = name;
         }
 
+        /// <summary>
+        /// Compares this instance with another instance.
+        /// </summary>
+        /// <param name="obj">Instance to compare with.</param>
+        /// <returns>A value that determines wether the instances are identical.</returns>
         public int CompareTo(object obj)
         {
             if (obj == null) return 1;
@@ -175,6 +224,10 @@ namespace MqttViewer.ViewModels
                 throw new ArgumentException("Object is not a TopicViewModel");
         }
 
+        /// <summary>
+        /// Update this element an its children.
+        /// </summary>
+        /// <param name="topic">New MQTT message.</param>
         public void updateTree(TopicModel topic)
         {
             TopicViewModel nextStep = null;
@@ -231,6 +284,11 @@ namespace MqttViewer.ViewModels
             }
         }
 
+        /// <summary>
+        /// Gets the path of  afull topic string.
+        /// </summary>
+        /// <param name="name">MQTT topic string.</param>
+        /// <returns>Path of the MQTT topic.</returns>
         private String fullNameToPath(String name)
         {
             if(!name.Contains('/')){
@@ -248,12 +306,22 @@ namespace MqttViewer.ViewModels
             }
         }
 
-        private String getSubpath(String currentPath, String fullPath)
+        /// <summary>
+        /// Gets the relative path from currentPath element to the targetPath.
+        /// </summary>
+        /// <param name="targetPath">Full path of the target element.</param>
+        /// <returns>Returns the relative path to the target.</returns>
+        private String getSubpath(String currentPath, String targetPath)
         {
             int lenght = currentPath.Length;
-            return fullPath.Remove(0, lenght);
+            return targetPath.Remove(0, lenght);
         }
 
+        /// <summary>
+        /// Called when the PropertyChanged event is raised.
+        /// </summary>
+        /// <param name="sender">Object that raised the event.</param>
+        /// <param name="e">EventArgs for the event.</param>
         private void onModelChanged(object sender, PropertyChangedEventArgs e)
         {
             switch (e.PropertyName)

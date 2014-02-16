@@ -11,7 +11,7 @@
         </Grid.ColumnDefinitions>
         
         <TextBox Text="{Binding brokerAddress, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding isBrokerAddressEnabled, Mode=OneWay}" Height="25" Margin="5" TextWrapping="Wrap" Grid.Column="0" />
-        <Button Content="{Binding buttonText, Mode=OneWay}" Margin="5" Width="75" Height="25" Grid.Column="1" Command="{Binding buttonCommand, Mode=OneWay}" />
+        <Button Content="{Binding connectionButtonText, Mode=OneWay}" Margin="5" Width="75" Height="25" Grid.Column="1" Command="{Binding connectionButtonCommand, Mode=OneWay}" />
 
     </Grid>
 </UserControl>
