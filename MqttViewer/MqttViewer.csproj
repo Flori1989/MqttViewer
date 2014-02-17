@@ -36,7 +36,7 @@
   <ItemGroup>
     <Reference Include="MqttLib, Version=1.0.0.1, Culture=neutral, PublicKeyToken=ef471bdaf8321fe9, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>.\MqttLib.dll</HintPath>
+      <HintPath>..\MqttDotNet\MqttLib.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
